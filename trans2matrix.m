@@ -33,7 +33,7 @@ fclose(fid); % 关闭文档
 % 读取文件，根据编码规则对原始数据进行转化
 itemsnum = size(code,2); % 取单元数组中的列
 
-output = zeros(itemsnum,lines);
+output = zeros(lines,itemsnum);
 
 fid = fopen(inputfile);
 tline = fgetl(fid);
@@ -43,14 +43,14 @@ while ischar(tline)
     tline=deblank(tline);
     tline=regexp(tline,splitter,'split');
     [~,icode,~] = intersect(code,tline);% 寻找下标
-    output(icode,lines)=1;
+    output(lines,icode)=1;
     tline=fgetl(fid);
 end
 fclose(fid);
 
 %% 把转换后的矩阵写入文件
 fid = fopen(outputfile,'w');
-for i=1:itemsnum
+for i=1:lines
     fprintf(fid,'%s\n',num2str(output(i,:)));
 end
 fclose(fid);

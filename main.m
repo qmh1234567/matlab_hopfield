@@ -1,6 +1,6 @@
 %% 使用Hopfield网络挖掘关联规则
 clear;
-global A B C tao
+global A B C tao n p nRules minCof
 % 参数初始化
 inputfile = 'test_i.txt';
 outputfile= 'as.txt'; % 输出转化后的01矩阵
@@ -10,30 +10,30 @@ minSup = 2;
 minCof = 0.5;
 nRules = 100; % 最大规则数
 % 调用编码函数，将交易集转化为01矩阵
-[transaction,code] = trans2matrix(inputfile,outputfile,' ')
-T = transaction;
+[T,code] = trans2matrix(inputfile,outputfile,' ')
 % 项目数
-p = size(T,1);
+n = size(T,1);
 % 交易数
-n = size(T,2);
+p = size(T,2);
 % 根据经验指定的相关变量
 A = 550;
 B = 100;
 C = 200;
 tao = 1;
 lambda =3;
-step=0.0001;
+step=0.0001; % 不宜过大
 % 生成区间为0-1，p*n的矩阵
-U = randi([0,1],p,n);
+%U = T;
+U = randi([0,1],n,p);
 disp('第一次的U')
 disp(U)
 V =(1+tanh(lambda*U))/2;
-iter_num = 5; %迭代次数
-E = zeros(1,iter_num);
-
-for k = 1:iter_num
+% 保存能量函数值的矩阵
+E = zeros(1,100);
+k=1;
+while k<5
     % 计算动态方程
-    dU=diff_u(U,minSup,V,T);
+    dU=diff_u(U,minSup,V,T)
     % 更新输入神经元
     U= U+dU*step;
     % 更新输出神经元
@@ -41,18 +41,20 @@ for k = 1:iter_num
     V = (1+tanh(lambda*U))/2
     % 计算能量函数
     e = energy(minSup,V,T);
+    E(k)=e;
+    k=k+1
 end
+% 最大频繁项集
+Frequent=int8(V)
+[~,index]=find(Frequent==1);
+F = unique(index');
+disp('最大频繁项集为:')
+code(F)
+% 根据最大频繁项集生成关联规则
+% 计算每个子项集的支持度
+S = support(T,F);
+% 计算关联规则
+R=rule(T,F,S);
 
-disp('最后的V')
-disp(V)
-% 返回最大元素 和最大元素在A中的行索引
-%[rows,cols]=size(V);
-%V1=zeros(rows,cols);
-%[V_max,V_ind]=max(V);
-%for j=1:cols
-%    V1(V_ind(j),j)=1;
-%end
-%disp(V1)
+
              
-
-
