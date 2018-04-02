@@ -1,4 +1,4 @@
-I1 I2 I5
-I2 I4
-I2 I3
-I1 I2 I5
+A C D
+B C E
+A B C E
+B E

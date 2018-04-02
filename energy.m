@@ -4,20 +4,22 @@ global A B C n p
 sum_x = 0;
 sum_z = 0;
 sum_y = 0;
-for t=1:n % column
-% 计算动态方程
-for i=1:p % tow
-   for j=1:p
-       if j~=i
-           sum_x =sum_x+V(t,i)*V(t,i);
-           X = 0;
-           for k=1:n
-              X = X+T(k,i)*T(k,i);
-           end
-           sum_z =sum_z+V(t,i)*V(t,j)*(minSup-X)*exp(minSup-X);
+% 计算能量函数
+for a=1:n % row
+for i=1:p % column
+   for b=1:n
+       for j=1:p
+            if j~=i
+                sum_x =sum_x+V(a,i)*V(b,j);
+                X = 0;
+                for k=1:n
+                     X = X+T(k,i)*T(k,i);
+                end
+                sum_z =sum_z+V(a,i)*V(b,j)*(minSup-X)*exp(minSup-X);
+            end
        end
    end
-    sum_y = sum_y + B*V(t,i)*(1-T(t,i));
+    sum_y = sum_y + B*V(a,i)*(1-T(a,i));
 end
 end
 e = -A/2*sum_x+B*sum_y+C/2*sum_z;

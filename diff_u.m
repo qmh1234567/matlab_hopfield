@@ -1,9 +1,9 @@
 function dU=diff_u(U,minSup,V,T)
 global A B C tao n p
 dU = zeros(size(U));  % 初始化为全0矩阵
-for a=1:n % column
+for a=1:n % tow
 % 计算动态方程
-for i=1:p % tow
+for i=1:p % column
    sum_x = 0;
 for b=1:n
    for j=1:p
