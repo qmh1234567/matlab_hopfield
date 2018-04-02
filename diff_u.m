@@ -7,12 +7,14 @@ for i=1:p % column
    sum_x = 0;
 for b=1:n
    for j=1:p
-          X = 0;
-          for k=1:n
-              X = X+ T(k,i)*T(k,j);
+          if j~=i
+              X = 0;
+              for k=1:n
+                  X = X+ T(k,i)*T(k,j);
+              end
+              Weight = A-C*(minSup-X)*exp(minSup-X);
+              sum_x =sum_x + V(b,j)*Weight;
           end
-          Weight = A-C*(minSup-X)*exp(minSup-X);
-          sum_x =sum_x + V(b,j)*Weight;
    end
 end
     I= B*(1-T(a,i));
