@@ -1,5 +1,5 @@
 % 计算关联规则
-function R=rule(T,F,S)
+function R=rule(T,F,S,sortFlag)
 global nRules minCof
 % 保存规则的数组
 R=cell(nRules,4);
@@ -39,6 +39,13 @@ for i=1:size(S,1)
 end        
 % 将规则的多余列清除掉
 R(k:end,:)=[];
+% 对规则进行排序
+switch sortFlag
+   case 1
+        R=sortrows(R,-3);
+    case 2
+        R=sortrows(R,-4);
+end
 
 
 

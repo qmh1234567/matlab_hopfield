@@ -19,7 +19,7 @@ for i=1:p % column
             end
        end
    end
-    sum_y = sum_y + B*V(a,i)*(1-T(a,i));
+    sum_y = sum_y + V(a,i)*(1-T(a,i));
 end
 end
 e = -A/2*sum_x+B*sum_y+C/2*sum_z;

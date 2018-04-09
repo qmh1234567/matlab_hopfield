@@ -1,6 +1,7 @@
 function dU=diff_u(U,minSup,V,T)
 global A B C tao n p
 dU = zeros(size(U));  % 初始化为全0矩阵
+W = zeros(n,p);
 for a=1:n % tow
 % 计算动态方程
 for i=1:p % column
@@ -13,6 +14,7 @@ for b=1:n
                   X = X+ T(k,i)*T(k,j);
               end
               Weight = A-C*(minSup-X)*exp(minSup-X);
+              W(a,i)=Weight;
               sum_x =sum_x + V(b,j)*Weight;
           end
    end
@@ -21,4 +23,7 @@ end
     dU(a,i) = -U(a,i)/tao+sum_x+I; %修改du的每一项
 end
 end
+
+
+
 
