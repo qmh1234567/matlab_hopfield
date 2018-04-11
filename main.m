@@ -1,5 +1,5 @@
 %% 使用Hopfield网络挖掘关联规则
-clear;
+%clear all;
 global A B C tao n p nRules minCof minSup
 % 参数初始化
 inputfile = 't.txt';
@@ -23,7 +23,8 @@ B = 100;
 C = 200;
 tao = 1;
 lambda =3;
-step=0.00001; % 不宜过大
+step=0.000001; % 不宜过大
+% step=0.0001;
 % 生成区间为0-1，p*n的矩阵
 % U = T;
 U = randi([0,1],n,p);
@@ -31,11 +32,11 @@ disp('第一次的U')
 disp(U)
 V =(1+tanh(lambda*U))/2;
 % 保存能量函数值的矩阵
-E = zeros(1,100);
+E = zeros(1,1000);
 k=1;
-while k<30
+while k<1000
     % 计算动态方程
-    dU=diff_u(U,minSupCount,V,T)
+    [dU,W]=diff_u(U,minSupCount,V,T);
     % 更新输入神经元
     U= U+dU*step
     % 更新输出神经元

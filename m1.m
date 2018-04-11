@@ -5,23 +5,22 @@
 % 根据激励信号的不同，忆阻器随时间的变化值不一样。如果是脉冲信号，就是一种二值模型。
 w1=1;
 t=linspace(0,4);
-% stepfun实现单位阶跃信号
-%V = sinc(t-2);
+Rm=cell(20,20);
 % 正弦信号
 V=sin(2*pi*w1*t);
-Ron=-2;
-Roff=1;
-% Mi=(Ron+Roff)/2;
-Mi=1.5;
-dM=(Ron-Roff)/2;
-Rm = Mi+dM*V
-figure(1)
-plot(t,Rm)
-title('忆阻器阻值随时间变化')
+
+for i=1:size(Mem1,1)
+    for j=1:size(Mem1,2)
+        Ron=Mem1(i,j);
+        Roff=Mem2(i,j);
+        Mi=zeros(1,100);
+        dM=(Ron-Roff)/2;
+        Rm{i,j} = Mi+dM*V;
+    end
+end
+
+        
+
 
 % 设定坐标轴显示范围
 % axis([-1,4,-0.5,1.5])
-
-
-
-
