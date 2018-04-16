@@ -2,7 +2,7 @@
 %clear all;
 global A B C tao n p nRules minCof minSup
 % 参数初始化
-inputfile = 't.txt';
+inputfile = 'test_data.txt';
 outputfile= 'as.txt'; % 输出转化后的01矩阵
 rulesfile = 'rules.txt'; % 输出关联规则
 % 用户自定义最小支持度、最小置信度
