@@ -24,31 +24,65 @@ C = 200;
 tao = 1;
 lambda =3;
 step=0.000001; % 不宜过大
+
+R =2000; % 与忆阻器串联的电阻
+
 % 生成区间为0-1，p*n的矩阵
-U = T;
-%U = randi([0,1],n,p);
+% U = T;
+U = randi([0,1],n,p);
 disp('第一次的U')
 disp(U)
 V =(1+tanh(lambda*U))/2;
 % 保存能量函数值的矩阵
 E = zeros(1,1000);
 k=1; %迭代次数 取1000
-while k<1000
-    % 计算动态方程
-    [dU,W]=diff_u(U,minSupCount,V,T);
-    % 更新输入神经元
-    U= U+dU*step
-    % 更新输出神经元
-    disp('中间的V')
-    V = (1+tanh(lambda*U))/2
-    % 计算能量函数
-    e = energy(minSupCount,V,T)
-    E(k)=e;
-    k=k+1
-end
-% 将权值映射为忆阻值
-% M=R./W-R;
+% 计算出权值和阈值
+[W,I]=newdiff(minSupCount,T);
+% M=2000./W-2000;
 % M(M==inf)=0;
+% Wm=1./M;
+% Wm(Wm==inf)=0;
+% % 
+% I=I./100;
+% Iv=0.6*(n*p+2)-I;
+% Iv=Iv.*100;
+
+% 归一化矩阵
+W1=mapminmax(W,0,1);
+
+% M=2000./W1-2000;
+% M(M==inf)=0;
+% M1=2000./M;
+% for i=1:size(M,1)
+%     M(i,i)=0;
+% end
+
+dU = zeros(size(U)); %初始化为全0矩阵
+ while k<100
+     % 计算du
+    for a=1:n
+        for i=1:p
+            sum_x = 0;
+            for b=1:n
+                % 从1行30列中提取5列出来 不能使用reshape，会改变数据的
+                Row_M =W1((a-1)*p+i,(b-1)*p+1:b*p);
+                % V的每一行与Rom_w的每一行相乘
+                sum_x = sum_x+ sum(V(b,:).*Row_M);
+            end
+             dU(a,i)=-U(a,i)/tao+sum_x+I(a,i);
+        end
+    end
+     % 更新输入神经元
+     U= U+dU*step
+     % 更新输出神经元
+     disp('中间的V')
+     V = (1+tanh(lambda*U))/2
+     % 计算能量函数
+     e = energy(minSupCount,V,T)
+     E(k)=e;
+     k=k+1
+end
+
 % 清除能量函数矩阵多余的列
 E(k:end)=[];
 % 绘制能量函数图

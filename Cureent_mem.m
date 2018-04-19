@@ -1,25 +1,34 @@
 clear;
 % Iamp=2e-03;
-count = 1000;
+count =1000;
 time=linspace(0,1,count);
+% time1=linspace(0,5*pi,count);
 % 步长
 dt = 1;
-% 输入的电流信号
+% 与忆阻器串联的电阻
+R=2000;
 
+% 输入的电流信号
 Iinput=0.005*sin(2*pi*time);
-figure(1)
+% Vinput=1*square(time1);
+% Iinput=1*square(time);
+
+subplot(2,3,1);
 plot(time,Iinput)
+
+
 title('电流随时间的变化')
 % 参数定义
 % 转化为mA
 Ioff=115e-06;
+% 8.9不能为负
 Ion=-8.9e-06;
 
 arf_on=10;
 arf_off=10;
 
-Roff=1000;
-Ron=50;
+Roff=20000;
+Ron=0;
 
 k_off=1.46e-09;
 k_on=-4.68e-13;
@@ -42,6 +51,7 @@ x=zeros(1,count);
 x(1) =0;
 % dx的范围
 dx=zeros(1,count);
+
 
 % t是迭代次数
 for t=1:count
@@ -68,7 +78,7 @@ for t=1:count
          x(t) = x_on;
      end
     M(t)=Ron+(Roff-Ron)/(x_off-x_on)*(x(t)-x_on);
-   
+
 end
 % 去掉x的最后一个数据
 x=x(1:count);
@@ -77,25 +87,38 @@ F_off_x=exp(-exp((x-a_off)./wc));
 F_on_x=exp(-exp((a_on-x)./wc));
 
 
-figure(2);
+subplot(2,3,2);
 plot(time,M)
 title('M随时间变化')
 V=M.*Iinput;
+
 
 % figure(3)
 % plot(time,x);
 % title('x随时间变化图')
 
 
-figure(4);
+subplot(2,3,3);
 plot(V,Iinput)
 title('伏安特性曲线')
 xlabel('V')
 ylabel('I')
 
-figure(5)
+subplot(2,3,4);
 plot(x,F_off_x,x,F_on_x);
 title('窗函数曲线')
+
+subplot(2,3,5);
+weight=2000./(M+2000);
+plot(time,weight)
+title('权值变化')
+
+subplot(2,3,6);
+plot(M,weight)
+title('突触随忆阻值的变化')
+
+
+
 
  
         

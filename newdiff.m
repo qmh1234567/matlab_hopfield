@@ -1,13 +1,11 @@
-function [dU,W]=diff_u(U,minSup,V,T)
-global A B C tao n p
-dU = zeros(size(U));  % 初始化为全0矩阵
+function [W,I]=newdiff(minSup,T)
+global A B C  n p
+
 W = zeros(n*p,n*p);
-M = zeros(n*p,n*p);
-X = zeros(n,p)
+I = zeros(n,p);
 for a=1:n % tow
 % 计算动态方程
 for i=1:p % column
-    sum_x = 0;
 for b=1:n
    for j=1:p
           % 权值矩阵是一种对称矩阵
@@ -20,13 +18,13 @@ for b=1:n
               % 权值矩阵  np行  np列
               W((a-1)*p+i,(b-1)*p+j)=Weight;
               % 计算权值和输入的累加和
-              sum_x = sum_x+ V(b,j)*Weight;
+              % sum_x =sum_x + V(b,j)*Weight;
           end
    end
 end
     % 阈值
-    I= B*(1-T(a,i))
-    dU(a,i) = -U(a,i)/tao+sum_x+I;
+    I(a,i)= B*(1-T(a,i));   
+%     dU(a,i) = -U(a,i)/tao+sum_x+I;
 end
 end
 
