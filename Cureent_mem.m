@@ -27,8 +27,8 @@ Ion=-8.9e-06;
 arf_on=10;
 arf_off=10;
 
-Roff=20000;
-Ron=0;
+Roff=1500;
+Ron=-2500;
 
 k_off=1.46e-09;
 k_on=-4.68e-13;
@@ -78,7 +78,6 @@ for t=1:count
          x(t) = x_on;
      end
     M(t)=Ron+(Roff-Ron)/(x_off-x_on)*(x(t)-x_on);
-
 end
 % 去掉x的最后一个数据
 x=x(1:count);
@@ -109,7 +108,7 @@ plot(x,F_off_x,x,F_on_x);
 title('窗函数曲线')
 
 subplot(2,3,5);
-weight=2000./(M+2000);
+weight=M;
 plot(time,weight)
 title('权值变化')
 

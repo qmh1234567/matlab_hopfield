@@ -1,8 +1,9 @@
 %% 使用Hopfield网络挖掘关联规则
+clc;
 clear;
 global A B C tao n p nRules minCof minSup
 % 参数初始化
-inputfile = 't.txt';
+inputfile = 't_a.txt';
 outputfile= 'as.txt'; % 输出转化后的01矩阵
 rulesfile = 'rules.txt'; % 输出关联规则
 % 用户自定义最小支持度、最小置信度
@@ -24,6 +25,7 @@ C = 200;
 tao = 1;
 lambda =3;
 step=0.000001; % 不宜过大
+% step=1000;
 
 R =2000; % 与忆阻器串联的电阻
 
@@ -38,38 +40,26 @@ E = zeros(1,1000);
 k=1; %迭代次数 取1000
 % 计算出权值和阈值
 [W,I]=newdiff(minSupCount,T);
-% M=2000./W-2000;
-% M(M==inf)=0;
-% Wm=1./M;
-% Wm(Wm==inf)=0;
-% % 
-% I=I./100;
-% Iv=0.6*(n*p+2)-I;
-% Iv=Iv.*100;
 
-% 归一化矩阵
-W1=mapminmax(W,0,1);
-
-% M=2000./W1-2000;
-% M(M==inf)=0;
-% M1=2000./M;
-% for i=1:size(M,1)
-%     M(i,i)=0;
-% end
+% 对权值矩阵进行归一化 -1 到 1之间
+% W2=W./(max(max(abs(W)))*10);
+% 映射到忆阻值矩阵
+M=W; % 用忆阻值代替权值
+Iv=I./100; % 阈值电流
 
 dU = zeros(size(U)); %初始化为全0矩阵
- while k<100
+ while k<1000
      % 计算du
     for a=1:n
         for i=1:p
             sum_x = 0;
             for b=1:n
                 % 从1行30列中提取5列出来 不能使用reshape，会改变数据的
-                Row_M =W1((a-1)*p+i,(b-1)*p+1:b*p);
+                Row_M =M((a-1)*p+i,(b-1)*p+1:b*p);
                 % V的每一行与Rom_w的每一行相乘
                 sum_x = sum_x+ sum(V(b,:).*Row_M);
             end
-             dU(a,i)=-U(a,i)/tao+sum_x+I(a,i);
+             dU(a,i)=-U(a,i)/tao+sum_x+Iv(a,i)*100;
         end
     end
      % 更新输入神经元
