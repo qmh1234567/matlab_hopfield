@@ -13,7 +13,7 @@ Iinput=0.005*sin(2*pi*time);
 % Vinput=1*square(time1);
 % Iinput=1*square(time);
 
-subplot(2,3,1);
+subplot(2,2,1);
 plot(time,Iinput)
 
 
@@ -27,8 +27,8 @@ Ion=-8.9e-06;
 arf_on=10;
 arf_off=10;
 
-Roff=1500;
-Ron=-2500;
+Roff=1000;
+Ron=-150;
 
 k_off=1.46e-09;
 k_on=-4.68e-13;
@@ -86,7 +86,7 @@ F_off_x=exp(-exp((x-a_off)./wc));
 F_on_x=exp(-exp((a_on-x)./wc));
 
 
-subplot(2,3,2);
+subplot(2,2,2);
 plot(time,M)
 title('M随时间变化')
 V=M.*Iinput;
@@ -97,24 +97,24 @@ V=M.*Iinput;
 % title('x随时间变化图')
 
 
-subplot(2,3,3);
+subplot(2,2,3);
 plot(V,Iinput)
 title('伏安特性曲线')
 xlabel('V')
 ylabel('I')
 
-subplot(2,3,4);
+subplot(2,2,4);
 plot(x,F_off_x,x,F_on_x);
 title('窗函数曲线')
 
-subplot(2,3,5);
-weight=M;
-plot(time,weight)
-title('权值变化')
+% subplot(2,3,5);
+% weight=M;
+% plot(time,weight)
+% title('权值变化')
 
-subplot(2,3,6);
-plot(M,weight)
-title('突触随忆阻值的变化')
+% subplot(2,3,6);
+% plot(M,weight)
+% title('突触随忆阻值的变化')
 
 
 

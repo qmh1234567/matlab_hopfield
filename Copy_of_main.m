@@ -3,7 +3,7 @@ clc;
 clear;
 global A B C tao n p nRules minCof minSup
 % 参数初始化
-inputfile = 't_a.txt';
+inputfile = 'test_data.txt';
 outputfile= 'as.txt'; % 输出转化后的01矩阵
 rulesfile = 'rules.txt'; % 输出关联规则
 % 用户自定义最小支持度、最小置信度
@@ -24,14 +24,13 @@ B = 100;
 C = 200;
 tao = 1;
 lambda =3;
-step=0.000001; % 不宜过大
-% step=1000;
+% step=0.00001; % 不宜过大
+step=0.000001;
 
-R =2000; % 与忆阻器串联的电阻
 
 % 生成区间为0-1，p*n的矩阵
-% U = T;
-U = randi([0,1],n,p);
+U = T;
+% U = randi([0,1],n,p);
 disp('第一次的U')
 disp(U)
 V =(1+tanh(lambda*U))/2;
@@ -41,14 +40,12 @@ k=1; %迭代次数 取1000
 % 计算出权值和阈值
 [W,I]=newdiff(minSupCount,T);
 
-% 对权值矩阵进行归一化 -1 到 1之间
-% W2=W./(max(max(abs(W)))*10);
 % 映射到忆阻值矩阵
-M=W; % 用忆阻值代替权值
-Iv=I./100; % 阈值电流
+M=W+100; % 用忆阻值代替权值  增加了100
+Iv=I./100; % 阈值电流     
 
 dU = zeros(size(U)); %初始化为全0矩阵
- while k<1000
+ while k<700
      % 计算du
     for a=1:n
         for i=1:p
@@ -59,9 +56,10 @@ dU = zeros(size(U)); %初始化为全0矩阵
                 % V的每一行与Rom_w的每一行相乘
                 sum_x = sum_x+ sum(V(b,:).*Row_M);
             end
-             dU(a,i)=-U(a,i)/tao+sum_x+Iv(a,i)*100;
+             dU(a,i)=-U(a,i)/tao+sum_x+Iv(a,i)*1000;% 阈值放大了10倍
         end
     end
+    dU
      % 更新输入神经元
      U= U+dU*step
      % 更新输出神经元
@@ -82,8 +80,13 @@ ylabel('能量函数')
 title('能量函数变化曲线')
 % 最大频繁项集
 Frequent=int8(V);
-[~,index]=find(Frequent==1);
-F = unique(index');
+index=[];
+for i=1:size(Frequent,2)
+     if(Frequent(:,i)==ones(size(Frequent,1),1))
+         index=[index;i];
+     end
+end
+F = unique(index')
 disp('最大频繁项集为:')
 code(F)
 % 根据最大频繁项集生成关联规则
