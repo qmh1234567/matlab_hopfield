@@ -3,13 +3,13 @@ clc;
 clear;
 global A B C tao n p nRules minCof minSup
 % 参数初始化
-inputfile = 'test_data.txt';
+inputfile = 'test_sets\mygoods.txt';
 outputfile= 'as.txt'; % 输出转化后的01矩阵
 rulesfile = 'rules.txt'; % 输出关联规则
 % 用户自定义最小支持度、最小置信度
 minSup = 0.5;
 minCof = 0.5;
-nRules = 100; % 最大规则数
+nRules = 1000; % 最大规则数
 % 调用编码函数，将交易集转化为01矩阵
 [T,code] = trans2matrix(inputfile,outputfile,' ')
 % 项目数
@@ -27,7 +27,6 @@ lambda =3;
 % step=0.00001; % 不宜过大
 step=0.000001;
 
-
 % 生成区间为0-1，p*n的矩阵
 U = T;
 % U = randi([0,1],n,p);
@@ -43,6 +42,9 @@ k=1; %迭代次数 取1000
 % 映射到忆阻值矩阵
 M=W+100; % 用忆阻值代替权值  增加了100
 Iv=I./100; % 阈值电流     
+
+% 归一化
+%  M1=W./(max(max(abs(W)))+10);
 
 dU = zeros(size(U)); %初始化为全0矩阵
  while k<700
@@ -65,6 +67,10 @@ dU = zeros(size(U)); %初始化为全0矩阵
      % 更新输出神经元
      disp('中间的V')
      V = (1+tanh(lambda*U))/2
+     % 如果输出矩阵全0，说明找不到频繁2项集的，就提前退出
+     if any(any(V))==0
+         break;
+     end
      % 计算能量函数
      e = energy(minSupCount,V,T)
      E(k)=e;
