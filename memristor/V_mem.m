@@ -1,8 +1,8 @@
 clear;
 % Iamp=2e-03;
-count =50;
+count =40;
 time=linspace(0,1,count);
-time1=linspace(0,5*pi,count);
+time1=linspace(0,4*pi,count);
 % 步长
 dt = 1;
 % 与忆阻器串联的电阻
@@ -48,7 +48,7 @@ M = zeros(1,count);
 %x的取值
 x=zeros(1,count);
 % 约定x的初始值
-x(1) =2;
+x(1) =0;
 % dx的范围
 dx=zeros(1,count);
 
@@ -72,7 +72,7 @@ for t=1:count
          dx(t)=k_on*(Iinput(t)/Ion-1)^arf_on*Fon*dt;
          x(t)=dx(t)+x(t-1);
     end
-%     % 控制x的范围
+%     控制x的范围
 %      if x(t) > x_off
 %         x(t) = x_off;
 %      elseif x(t) < x_on
@@ -109,8 +109,7 @@ xlabel('V')
 ylabel('I')
 
 subplot(2,2,4);
-% plot(x,F_off_x,x,F_on_x);
-plot(time1/pi,x);
+plot(x,F_off_x,x,F_on_x);
 title('窗函数曲线')
 
 figure;

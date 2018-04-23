@@ -2,6 +2,13 @@
 clc;
 clear;
 global A B C tao n p nRules minCof minSup code
+%% 生成交易集
+n=20;
+p=15;
+% 调用自动生成交易集函数
+[T,code] = produce_T(n,p)
+% 最小支持度计数 取最接近的整数
+minSupCount=round(minSup*n);
 %% 参数初始化
 inputfile = 'GUIS\mygoods.txt';
 outputfile= 'as.txt'; % 输出转化后的01矩阵
@@ -9,16 +16,6 @@ outputfile= 'as.txt'; % 输出转化后的01矩阵
 minSup = 0.5;
 minCof = 0.5;
 nRules = 1000; % 最大规则数
-
-% 调用编码函数，将交易集转化为01矩阵
-[T,code] = trans2matrix(inputfile,outputfile,' ')
-% 项目数
-n = size(T,1);
-% 最小支持度计数 取最接近的整数
-minSupCount=round(minSup*n);
-% 交易数
-p = size(T,2);
-
 % 根据经验指定的相关变量
 A = 550;
 B = 100;
@@ -122,4 +119,4 @@ R=rule(T,F,S,1);
 
     
 
-             
+                

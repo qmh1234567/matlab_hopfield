@@ -1,4 +1,4 @@
-function T=produce_T(n,p)
+function [T code]=produce_T(n,p)
 % 产生随机交易矩阵
 T= randi([0,1],n,p);
 % 编码库  大概有30类物品
@@ -15,7 +15,7 @@ for i=1:size(T,1)
     % 进行编码 将cell数组转化为字符数组
     code1=code(ib);
     % 因为不同的cell之间不会有空格，需要手动添加
-    code2=cellfun(@(u)[u,' '],code1(1:end-1),'UniformOutput',false);
+    code2=cellfun(@(u)[u,' '],code1(1:end),'UniformOutput',false);
     str_arry=cell2mat(code2);
     % 写入文件
     fprintf(fid,'%s\n',str_arry);
