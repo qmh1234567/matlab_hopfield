@@ -22,7 +22,7 @@ function varargout = MHNN_tranmatrix(varargin)
 
 % Edit the above text to modify the response to help MHNN_tranmatrix
 
-% Last Modified by GUIDE v2.5 22-Apr-2018 10:39:03
+% Last Modified by GUIDE v2.5 24-Apr-2018 10:22:56
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -90,5 +90,196 @@ set(handles.T_data,'String',ex);
 [T code]=trans2matrix(inputfile,outputfile,' ')
 set(handles.T_text,'String',num2str(T));
 % 输出cell数组 手动添加空格
-code1=cellfun(@(u)[u,' '],code(1:end-1),'UniformOutput',false);
-set(handles.code_text,'String',num2str(code1));
+code1=cellfun(@(u)[u,' '],code(1:end),'UniformOutput',false);
+set(handles.code_text,'String',cell2mat(code1));
+
+% 保存文件路径
+set(handles.inputfile,'String',inputfile);
+% 清空上次的内容
+% 最大频繁项集
+set(handles.Frequent,'String','');
+set(handles.oldFreq,'String','');
+% 关联规则条数
+set(handles.RuleNum,'String','');
+set(handles.oldRuleNum,'String','');
+% 能量函数图
+cla(handles.axes1);
+cla(handles.axes2);
+% 关联规则
+set(handles.Rule_txt,'String','');
+set(handles.oldRule_txt,'String','');
+% 滑动条位置
+set(handles.slider1,'Value',0);
+set(handles.slider2,'Value',0);
+
+
+
+% --- Executes on slider movement.
+function slider1_Callback(hObject, eventdata, handles)
+% hObject    handle to slider1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+ex=importdata('rules.txt');
+MaxCount=16; %最大显示条数
+row=size(ex,1)
+if row>MaxCount
+    slider = get(hObject,'Value')
+    x1=1-slider;
+    % 取得当前需要显示的数据量
+    count=round(row*x1)
+    if count>MaxCount
+        % 显示对应数据
+        set(handles.Rule_txt,'String',ex(count-MaxCount:count));
+    end
+else
+     % 显示对应数据
+     set(handles.Rule_txt,'String',ex(1:row));
+     set(hObject,'Value',0);
+end
+
+
+
+
+
+% --- Executes during object creation, after setting all properties.
+function slider1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on button press in MemHop_drag.
+function MemHop_drag_Callback(hObject, eventdata, handles)
+% hObject    handle to MemHop_drag (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+inputfile=get(handles.inputfile,'String');
+% 调用忆阻hopfield网络
+[E Freq R]=main(inputfile);
+% 绘制忆阻hopfield网络的能量函数曲线
+axes(handles.axes1);
+plot(E);
+xlabel('迭代次数')
+ylabel('能量函数')
+title('忆阻hopfield能量函数变化曲线')
+
+% 最大频繁项集 输出cell数组 手动添加空格
+Freq1=cellfun(@(u)[u,' '],Freq(1:end),'UniformOutput',false);
+set(handles.Frequent,'String',cell2mat(Freq1));
+
+% 设置关联规则条数
+set(handles.RuleNum,'String',num2str(size(R,1)));
+%读取关联规则文件内容
+Rulefile='rules.txt';
+ex=importdata(Rulefile)
+Maxcount=16; %15假设为最大显示行数
+row=size(ex,1); % 总行数
+if row>Maxcount
+    % 显示部分内容
+    set(handles.Rule_txt,'String',ex(1:Maxcount));
+    % 设置滑动条位置 不能取整
+    x=Maxcount/row;
+    set(handles.slider1,'Value',(1-x));
+else
+    % 设置内容全部显示
+    set(handles.Rule_txt,'String',ex);
+    % 设置滑动条位置
+    set(handles.slider1,'Value',0);
+end
+
+
+
+
+% --- Executes on button press in pushbutton5.
+function pushbutton5_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in Hopfield_drag.
+function Hopfield_drag_Callback(hObject, eventdata, handles)
+% hObject    handle to Hopfield_drag (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+inputfile=get(handles.inputfile,'String')
+% 调用hopfield网络
+[oldE oldFreq oldR]=oldmain(inputfile);
+% 绘制hopfiedl网络能量函数曲线
+axes(handles.axes2);
+plot(oldE);
+xlabel('迭代次数')
+ylabel('能量函数')
+title('hopfield能量函数变化曲线')
+% 最大频繁项集  输出cell数组 手动添加空格
+oldFreq1=cellfun(@(u)[u,' '],oldFreq(1:end),'UniformOutput',false);
+set(handles.oldFreq,'String',cell2mat(oldFreq1));
+% 设置关联规则条数
+set(handles.oldRuleNum,'String',num2str(size(oldR,1)));
+%读取关联规则文件内容
+Rulefile='oldrules.txt';
+ex=importdata(Rulefile)
+Maxcount=16; %15假设为最大显示行数
+row=size(ex,1); % 总行数
+if row>Maxcount
+    % 显示部分内容
+    set(handles.oldRule_txt,'String',ex(1:Maxcount));
+    % 设置滑动条位置 不能取整
+    x=Maxcount/row;
+    set(handles.slider2,'Value',(1-x));
+else
+    % 设置内容全部显示
+    set(handles.oldRule_txt,'String',ex);
+    % 设置滑动条位置
+    set(handles.slider2,'Value',0);
+end
+
+
+% --- Executes on slider movement.
+function slider2_Callback(hObject, eventdata, handles)
+% hObject    handle to slider2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+ex=importdata('oldrules.txt');
+MaxCount=16; %最大显示条数
+row=size(ex,1);
+if row>MaxCount
+    slider = get(hObject,'Value')
+    x1=1-slider;
+    % 取得当前需要显示的数据量
+    count=round(row*x1);
+    if count>MaxCount
+        % 显示对应数据
+        set(handles.oldRule_txt,'String',ex(count-MaxCount:count));
+    end
+else
+     % 显示对应数据
+     set(handles.oldRule_txt,'String',ex(1:row));
+     set(hObject,'Value',0);
+end
+
+
+
+% --- Executes during object creation, after setting all properties.
+function slider2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end

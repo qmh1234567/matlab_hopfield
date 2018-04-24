@@ -1,16 +1,24 @@
 %% 使用Hopfield网络挖掘关联规则
-function [E Freq R]=Copy_of_main(T,code1)
-global A B C tao  nRules minCof minSup n p code
-code=code1;
-% 最小支持度计数 取最接近的整数
-n=size(T,1); % 交易次数
-p=size(T,2); % 物品种类
-minSupCount=round(minSup*n);
+clc;
+clear;
+global A B C tao n p nRules minCof minSup code
 %% 参数初始化
+inputfile = 'GUIS\mygoods.txt';
+outputfile= 'as.txt'; % 输出转化后的01矩阵
 % 用户自定义最小支持度、最小置信度
 minSup = 0.5;
 minCof = 0.5;
 nRules = 1000; % 最大规则数
+
+% 调用编码函数，将交易集转化为01矩阵
+[T,code] = trans2matrix(inputfile,outputfile,' ')
+% 项目数
+n = size(T,1);
+% 最小支持度计数 取最接近的整数
+minSupCount=round(minSup*n);
+% 交易数
+p = size(T,2);
+
 % 根据经验指定的相关变量
 A = 550;
 B = 100;
@@ -38,21 +46,19 @@ Iv=I./100; % 阈值电流
 % 将权重映射到忆阻值
 M2=W./(max(max(abs(W)))+10); % 归一化
 x=real(fix(log10(max(max(abs(W)))))); %取权重的量级
-M1=M2*10^x+10^(x-1); % 可减少迭代次数，并保证结果的准确性
+M1=M2*10^x+10^(x-2); % 可减少迭代次数，并保证结果的准确性
 dU = zeros(size(U)); %初始化为全0矩阵
 
-% 决定步长和迭代次数
+% 决定步长
 if x>4
     step=10^(-(x+3));
-    Count=150;
 else
     step=10^(-(x+2));
-    Count=500;
 end
 
 
 % 进行迭代，找出频繁项集
- while k<Count
+ while k<500
      % 计算du
     for a=1:n
         for i=1:p
@@ -89,6 +95,11 @@ end
 %% 结果输出  能量函数曲线、最大频繁项集、关联规则
 % 清除能量函数矩阵多余的列
 E(k:end)=[];
+% 绘制能量函数图
+plot(E)
+xlabel('迭代次数')
+ylabel('能量函数')
+title('能量函数变化曲线')
 
 % 最大频繁项集
 Frequent=int8(V);
@@ -101,14 +112,14 @@ for i=1:size(Frequent,2)
 end
 F = unique(index')
 disp('最大频繁项集为:')
-Freq = code(F)
+code(F)
 
 % 根据最大频繁项集生成关联规则
 % 计算每个子项集的支持度
 S = support(T,F);
-% 计算关联规则 1是按照支持度排序  2是按照置信度排序 0代表oldmain  1代表main 3代表copyofmain
-R=rule(T,F,S,1,3);
+% 计算关联规则 1是按照支持度排序  2是按照置信度排序
+R=rule(T,F,S,1);
 
     
 
-                
+             

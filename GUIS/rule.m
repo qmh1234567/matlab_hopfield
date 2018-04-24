@@ -1,7 +1,13 @@
 %% 计算关联规则
-function R=rule(T,F,S,sortFlag)
+function R=rule(T,F,S,sortFlag,mainFlag)
 global nRules minCof
-rulesfile = 'rules.txt'; % 输出关联规则
+if mainFlag==0
+    rulesfile='oldrules.txt';
+elseif mainFlag==1
+    rulesfile = 'rules.txt'; % 输出关联规则
+else
+    rulesfile='CMrules.txt'
+end
 % 保存规则的数组
 R=cell(nRules,4);
 % 计数次数
