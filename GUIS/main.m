@@ -19,9 +19,9 @@ minSupCount=round(minSup*n);
 p = size(T,2);
 
 % 根据经验指定的相关变量
-A = 550;
+A = 350;
 B = 100;
-C = 200;
+C = 110;
 tao = 1;
 lambda =3;
 
@@ -44,7 +44,7 @@ Iv=I./100; % 阈值电流
 
 % 将权重映射到忆阻值
 M2=W./(max(max(abs(W)))+10); % 归一化
-x=real(fix(log10(max(max(abs(W)))))); %取权重的量级
+x=real(fix(log10(max(max(abs(W))))));%取权重的量级
 M1=M2*10^x+10^(x-2); % 可减少迭代次数，并保证结果的准确性
 dU = zeros(size(U)); %初始化为全0矩阵
 
@@ -78,7 +78,7 @@ end
         end
     end
      % 更新输入神经元
-     U= U+dU*step
+     U= U+dU*step;
      % 更新输出神经元
      disp('中间的V')
      V = (1+tanh(lambda*U))/2
@@ -87,9 +87,9 @@ end
          break;
      end
      % 计算能量函数
-     e = energy(minSupCount,V,T)
+     e = energy(minSupCount,V,T);
      E(k)=e;
-     k=k+1
+     k=k+1;
  end
 
 %% 结果输出  能量函数曲线、最大频繁项集、关联规则
@@ -120,6 +120,7 @@ Freq= code(F)
 S = support(T,F);
 % 计算关联规则 1是按照支持度排序  2是按照置信度排序   0代表oldmain  1代表main
 R=rule(T,F,S,1,1);
+
 
     
 

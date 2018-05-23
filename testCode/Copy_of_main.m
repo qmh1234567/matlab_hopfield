@@ -1,5 +1,5 @@
 %% 使用Hopfield网络挖掘关联规则
-function [E Freq R]=Copy_of_main(T,code1)
+function [Freq,Rcount,Ecount]=Copy_of_main(T,code1,W,I)
 global A B C tao  nRules minCof minSup n p code
 code=code1;
 % 最小支持度计数 取最接近的整数
@@ -10,7 +10,7 @@ minSupCount=round(minSup*n);
 % 用户自定义最小支持度、最小置信度
 minSup = 0.5;
 minCof = 0.5;
-nRules = 1000; % 最大规则数
+nRules = 500; % 最大规则数
 % 根据经验指定的相关变量
 A = 350;
 B = 100;
@@ -24,12 +24,12 @@ disp('第一次的U')
 disp(U)
 V =(1+tanh(lambda*U))/2;
 % 保存能量函数值的矩阵
-E = zeros(1,1000);
+E = zeros(1,510);
 k=1; %迭代次数 
 
 %% 计算最大频繁项集
 % 计算出权值和阈值
-[W,I]=newdiff(minSupCount,T);
+% [W,I]=newdiff(minSupCount,T);
 
 % 映射到忆阻值矩阵
 % M=W+100; % 用忆阻值代替权值  增加了100
@@ -47,7 +47,7 @@ if x>4
     Count=150;
 else
     step=10^(-(x+2));
-    Count=800;
+    Count=500;
 end
 
 
@@ -81,33 +81,52 @@ end
      % 计算能量函数
      e = energy(minSupCount,V,T);
      E(k)=e;
-     k=k+1
+     k=k+1;
  end
 
 %% 结果输出  能量函数曲线、最大频繁项集、关联规则
-% 清除能量函数矩阵多余的列
-E(k:end)=[];
-E(k:end)=[];
-
 % 最大频繁项集
 Frequent=int8(V);
-index=[];
+
+% 清除能量函数矩阵多余的列
+E(k:end)=[];
+
+
+% 找到收敛稳定的最小的次数
+for i=size(E,2):-1:1
+    if(abs(abs(E(i))-abs(E(end)))>500)
+        Ecount=i;
+        break;
+    end
+end
+        
+
+
+index=zeros(1,size(Frequent,2));
+k=1;
 % 只需要全1的列，或者趋近于1的列
 for i=1:size(Frequent,2)
      if(Frequent(:,i)==ones(size(Frequent,1),1))
-         index=[index;i];
+         index(k)=i;
+         k=k+1;
      end
 end
-F = unique(index')
-disp('最大频繁项集为:')
-Freq = code(F)
+index(k:end)=[];
+
+
+F = unique(index');
+Freq = code(F);
 
 % 根据最大频繁项集生成关联规则
 % 计算每个子项集的支持度
 S = support(T,F);
 % 计算关联规则 1是按照支持度排序  2是按照置信度排序 0代表oldmain  1代表main 3代表copyofmain
-R=rule(T,F,S,1,3);
-% R={};
+R=rule(S,1,3);
+Rcount=size(R,1);
+
+
+
+
     
 
                 

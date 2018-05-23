@@ -19,9 +19,9 @@ minSupCount=round(minSup*n);
 p = size(T,2);
 
 % 根据经验指定的相关变量
-A = 550;
+A = 350;
 B = 100;
-C = 200;
+C = 110;
 tao = 1;
 lambda =3;
 

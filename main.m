@@ -3,15 +3,20 @@ clc;
 clear;
 global A B C tao n p nRules minCof minSup code
 %% 参数初始化
-inputfile = 'GUIS\mygoods.txt';
-outputfile= 'as.txt'; % 输出转化后的01矩阵
+n=10;
+p=12;
+p1=0.5;
+[T,code] = produce_T(n,p,p1);
+% inputfile = 'GUIS\test_sets\tm.txt';
+% inputfile='t_a.txt';
+% outputfile= 'as.txt'; % 输出转化后的01矩阵
 % 用户自定义最小支持度、最小置信度
 minSup = 0.5;
 minCof = 0.5;
 nRules = 1000; % 最大规则数
 
 % 调用编码函数，将交易集转化为01矩阵
-[T,code] = trans2matrix(inputfile,outputfile,' ')
+% [T,code] = trans2matrix(inputfile,outputfile,' ')
 % 项目数
 n = size(T,1);
 % 最小支持度计数 取最接近的整数
@@ -20,16 +25,15 @@ minSupCount=round(minSup*n);
 p = size(T,2);
 
 % 根据经验指定的相关变量
-A = 550;
+A = 350;
 B = 100;
-C = 200;
+C = 110;
 tao = 1;
 lambda =3;
 
 % U初始化为T
-U = T;
-disp('第一次的U')
-disp(U)
+U = T
+
 V =(1+tanh(lambda*U))/2;
 % 保存能量函数值的矩阵
 E = zeros(1,1000);
@@ -39,40 +43,46 @@ k=1; %迭代次数
 % 计算出权值和阈值
 [W,I]=newdiff(minSupCount,T);
 
-% 映射到忆阻值矩阵
-% M=W+100; % 用忆阻值代替权值  增加了100
-Iv=I./100; % 阈值电流     
+% Iv=I./100; % 阈值电流     
 
 % 将权重映射到忆阻值
-M2=W./(max(max(abs(W)))+10); % 归一化
+% W2=W./(max(max(abs(W)))+10); % 归一化
+
+
+% 忆阻值
+% Mm=R./(1-W2)+R;
+
 x=real(fix(log10(max(max(abs(W)))))); %取权重的量级
-M1=M2*10^x+10^(x-2); % 可减少迭代次数，并保证结果的准确性
+% M1=W2*10^x+10^(x-2); % 可减少迭代次数，并保证结果的准确性
 dU = zeros(size(U)); %初始化为全0矩阵
 
 % 决定步长
 if x>4
     step=10^(-(x+3));
+    Count=150;
 else
     step=10^(-(x+2));
+    Count=500;
 end
-
+% step=0.00001;
+% Count=510;
 
 % 进行迭代，找出频繁项集
- while k<500
+ while k<Count
      % 计算du
     for a=1:n
         for i=1:p
             sum_x = 0;
             for b=1:n
                 % 从1行30列中提取5列出来 不能使用reshape，会改变数据的
-                Row_M =M1((a-1)*p+i,(b-1)*p+1:b*p);
+                Row_M =W((a-1)*p+i,(b-1)*p+1:b*p);
                 % V的每一行与Rom_w的每一行相乘
                 sum_x = sum_x+ sum(V(b,:).*Row_M);
             end
             if x>4
-             dU(a,i)=-U(a,i)/tao+sum_x+Iv(a,i)*100*10^(x-2);
+             dU(a,i)=-U(a,i)/tao+sum_x+I(a,i);
             else
-             dU(a,i)=-U(a,i)/tao+sum_x+Iv(a,i)*100*10^(x-3);  
+             dU(a,i)=-U(a,i)/tao+sum_x+I(a,i);  
             end
         end
     end
@@ -100,7 +110,7 @@ plot(E)
 xlabel('迭代次数')
 ylabel('能量函数')
 title('能量函数变化曲线')
-
+V=int8(V)
 % 最大频繁项集
 Frequent=int8(V);
 index=[];
@@ -119,6 +129,12 @@ code(F)
 S = support(T,F);
 % 计算关联规则 1是按照支持度排序  2是按照置信度排序
 R=rule(T,F,S,1);
+n
+p
+max(max(abs(W)))
+x
+Count
+step
 
     
 

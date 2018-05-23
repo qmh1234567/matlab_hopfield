@@ -22,6 +22,6 @@ for i=1:p % column
     sum_y = sum_y + V(a,i)*(1-T(a,i));
 end
 end
-e = -A/2*sum_x+B*sum_y+C/2*sum_z;
+e = -A/2*sum_x-B*sum_y+C/2*sum_z;
 
           

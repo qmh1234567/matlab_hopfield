@@ -5,13 +5,15 @@ time=linspace(0,1,count);
 % 步长
 dt = 1;
 % 与忆阻器串联的电阻
-R=2000;
+R=30000;
 
 % 输入的电流信号
 Iinput=0.005*sin(2*pi*time);
 subplot(2,2,1);
-plot(time,Iinput)
+plot(time,Iinput,'b')
 title('电流随时间的变化')
+xlabel({'t/s','a'})
+ylabel('I(A)')
 
 % 参数定义
 % 转化为mA
@@ -19,11 +21,11 @@ Ioff=115e-06;
 % 必须为负值
 Ion=-8.9e-06;
 
-arf_on=10;
-arf_off=10;
+arf_on=12;
+arf_off=12;
 
-Roff=1000;
-Ron=50;
+Roff=3e+06;
+Ron=100;
 
 k_off=1.46e-09;
 k_on=-4.68e-13;
@@ -83,10 +85,11 @@ F_on_x=exp(-exp((a_on-x)./wc));
 
 
 subplot(2,2,2);
-plot(time,M)
+plot(time,M,'b')
 title('M随时间变化')
 V=M.*Iinput;
-
+xlabel({'t/s','b'})
+ylabel('M')
 
 % figure(3)
 % plot(time,x);
@@ -94,17 +97,40 @@ V=M.*Iinput;
 
 
 subplot(2,2,3);
-plot(V,Iinput)
+plot(V,Iinput,'b')
 title('伏安特性曲线')
-xlabel('V')
-ylabel('I')
+xlabel({'V(v)','c'})
+ylabel('I(A)')
 
 subplot(2,2,4);
-plot(x,F_off_x,x,F_on_x);
+h3=plot(x,F_off_x,x,F_on_x);
 title('窗函数曲线')
+legend('foff','fon','WestOutside');
+xlabel({'x(nm)','d'})
+ylabel('f(x)')
+
+
+subplot(1,2,1);
+plot(time,M,'b')
+title('M随时间变化')
+V=M.*Iinput;
+xlabel({'t/s','a'})
+ylabel('M')
+
+% 突触随忆阻值的变化
+subplot(1,2,2)
+w=M./(M+R);
+plot(M,w)
+title('突触随忆阻值的变化');
+xlabel({'M','b'})
+ylabel('W')
 
 
 
+% figure
+% plot(Iinput,M);
+% xlabel('I')
+% ylabel('M')
 
 
 % subplot(2,3,5);

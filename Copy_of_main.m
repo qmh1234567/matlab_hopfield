@@ -3,23 +3,38 @@ clc;
 clear;
 global A B C tao n p nRules minCof minSup code
 %% 生成交易集
-n=20;
-p=15;
+% n=20;
+% p=15;
 % 调用自动生成交易集函数
-[T,code] = produce_T(n,p)
+% [T,code] = produce_T(n,p)
+% 最小支持度计数 取最接近的整数
+% minSupCount=round(minSup*n);
+%% 参数初始化
+% inputfile = 't_a.txt';
+inputfile = 'GUIS\test_sets\tm.txt';
+outputfile= 'as.txt'; % 输出转化后的01矩阵
+% p1=0.5;
+% n=6;
+% p=8;
+% [T,code]=produce_T(n,p,p1)
+% 调用编码函数，将交易集转化为01矩阵
+[T,code] = trans2matrix(inputfile,outputfile,' ')
+
+% % 项目数
+n = size(T,1);
 % 最小支持度计数 取最接近的整数
 minSupCount=round(minSup*n);
-%% 参数初始化
-inputfile = 'GUIS\mygoods.txt';
-outputfile= 'as.txt'; % 输出转化后的01矩阵
+% % 交易数
+p = size(T,2);
+
 % 用户自定义最小支持度、最小置信度
 minSup = 0.5;
 minCof = 0.5;
 nRules = 1000; % 最大规则数
 % 根据经验指定的相关变量
-A = 550;
+A = 350;
 B = 100;
-C = 200;
+C = 110;
 tao = 1;
 lambda =3;
 
@@ -44,18 +59,21 @@ Iv=I./100; % 阈值电流
 M2=W./(max(max(abs(W)))+10); % 归一化
 x=real(fix(log10(max(max(abs(W)))))); %取权重的量级
 M1=M2*10^x+10^(x-2); % 可减少迭代次数，并保证结果的准确性
+
 dU = zeros(size(U)); %初始化为全0矩阵
 
 % 决定步长
 if x>4
     step=10^(-(x+3));
+    Count=150;
 else
     step=10^(-(x+2));
+    Count=500;
 end
 
 
 % 进行迭代，找出频繁项集
- while k<500
+ while k<Count
      % 计算du
     for a=1:n
         for i=1:p
@@ -73,7 +91,6 @@ end
             end
         end
     end
-    dU
      % 更新输入神经元
      U= U+dU*step
      % 更新输出神经元
@@ -86,7 +103,7 @@ end
      % 计算能量函数
      e = energy(minSupCount,V,T)
      E(k)=e;
-     k=k+1
+     k=k+1;
  end
 
 %% 结果输出  能量函数曲线、最大频繁项集、关联规则

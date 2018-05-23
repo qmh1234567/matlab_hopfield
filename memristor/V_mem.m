@@ -1,8 +1,8 @@
 clear;
 % Iamp=2e-03;
-count =40;
+count =50;
 time=linspace(0,1,count);
-time1=linspace(0,4*pi,count);
+time1=linspace(0,5*pi,count);
 % 步长
 dt = 1;
 % 与忆阻器串联的电阻
@@ -20,14 +20,18 @@ plot(time1/pi,Vinput)
 title('电压随时间的变化')
 % 参数定义
 % 转化为mA
-Ioff=300e-06;
+% Ioff=300e-06;
+Ioff=115e-06;
 % 8.9不能为负
-Ion=-30e-06;
+% Ion=-30e-06;
+Ion=-8.9e-06;
 
-arf_on=12;
-arf_off=12;
+% arf_on=12;
+% arf_off=12;
+arf_on=10;
+arf_off=10;
 
-Roff=1000;
+Roff=2000;
 Ron=50;
 
 k_off=1.46e-09;

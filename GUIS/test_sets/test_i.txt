@@ -1,5 +1,5 @@
 bread milk beer
 bread diaper beer egg milk
 milk diaper beer cook
-bread milk diaper beer
-bread milk diaper cook beer
+milk diaper 
+bread diaper cook beer

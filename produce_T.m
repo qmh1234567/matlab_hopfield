@@ -3,8 +3,8 @@ function [T code]=produce_T(n,p,p1)
 % 产生随机交易矩阵
 % T= randi([0,1],n,p)>(1-p1);
 % T(find(T==2))=1; % 将1的概率变多一些
-T=zeros(n,p); %产生全0矩阵
-idx=randperm(n*p);  %产生随机打乱的1-n*p个数
+T=zeros(n,p);
+idx=randperm(n*p);
 index=p1*(n*p)
 T(idx(1:index))=1;
 
