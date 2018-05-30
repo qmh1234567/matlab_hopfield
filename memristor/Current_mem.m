@@ -109,7 +109,7 @@ legend('foff','fon','WestOutside');
 xlabel({'x(nm)','d'})
 ylabel('f(x)')
 
-
+figure(2)
 subplot(1,2,1);
 plot(time,M,'b')
 title('M随时间变化')
@@ -126,21 +126,6 @@ xlabel({'M','b'})
 ylabel('W')
 
 
-
-% figure
-% plot(Iinput,M);
-% xlabel('I')
-% ylabel('M')
-
-
-% subplot(2,3,5);
-% weight=M;
-% plot(time,weight)
-% title('权值变化')
-
-% subplot(2,3,6);
-% plot(M,weight)
-% title('突触随忆阻值的变化')
 
 
 
