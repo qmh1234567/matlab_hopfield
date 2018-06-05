@@ -1,6 +1,6 @@
 %% 使用Hopfield网络挖掘关联规则
 function [E Freq R]=main(inputfile)
-global A B C tao n p nRules minCof minSup code
+global A B C tao nRules minCof minSup 
 %% 参数初始化
 % inputfile = 'mygoods.txt';
 outputfile= 'as.txt'; % 输出转化后的01矩阵
@@ -36,7 +36,7 @@ k=1; %迭代次数
 
 %% 计算最大频繁项集
 % 计算出权值和阈值
-[W,I]=newdiff(minSupCount,T);
+[W,I]=newdiff(minSupCount,T,n,p);
 
 % 映射到忆阻值矩阵
 % M=W+100; % 用忆阻值代替权值  增加了100
@@ -87,7 +87,7 @@ end
          break;
      end
      % 计算能量函数
-     e = energy(minSupCount,V,T);
+     e = energy(minSupCount,V,T,n,p);
      E(k)=e;
      k=k+1;
  end
@@ -119,7 +119,7 @@ Freq= code(F)
 % 计算每个子项集的支持度
 S = support(T,F);
 % 计算关联规则 1是按照支持度排序  2是按照置信度排序   0代表oldmain  1代表main
-R=rule(T,F,S,1,1);
+R=rule(T,F,S,1,1,code);
 
 
     

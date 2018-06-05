@@ -1,5 +1,5 @@
-function e=energy(minSup,V,T)
-global A B C n p
+function e=energy(minSup,V,T,n,p)
+global A B C 
 % ≥ı ºªØ
 sum_x = 0;
 sum_z = 0;

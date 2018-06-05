@@ -1,6 +1,7 @@
-function [W,I]=newdiff(minSup,T)
-global A B C  n p
-
+function [W,I]=newdiff(minSup,T,n,p)
+A = 350;
+B = 100;
+C = 110;
 W = zeros(n*p,n*p);
 I = zeros(n,p);
 for a=1:n % tow

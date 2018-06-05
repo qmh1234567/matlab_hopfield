@@ -1,6 +1,6 @@
 %% 使用Hopfield网络挖掘关联规则
 function [Freq,Rcount,Ecount]=Copy_of_main(T,code1,W,I)
-global A B C tao  nRules minCof minSup n p code
+global A B C tao  nRules minCof minSup code
 code=code1;
 % 最小支持度计数 取最接近的整数
 n=size(T,1); % 交易次数
@@ -58,7 +58,7 @@ end
         for i=1:p
             sum_x = 0;
             for b=1:n
-                % 从1行30列中提取5列出来 不能使用reshape，会改变数据的
+                % 从1行n*p列中提取p列出来 不能使用reshape，会改变数据的
                 Row_M =M1((a-1)*p+i,(b-1)*p+1:b*p);
                 % V的每一行与Rom_w的每一行相乘
                 sum_x = sum_x+ sum(V(b,:).*Row_M);
@@ -79,7 +79,7 @@ end
          break;
      end
      % 计算能量函数
-     e = energy(minSupCount,V,T);
+     e = energy(minSupCount,V,T,n,p);
      E(k)=e;
      k=k+1;
  end

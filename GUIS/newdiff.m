@@ -1,5 +1,5 @@
-function [W,I]=newdiff(minSup,T)
-global A B C  n p
+function [W,I]=newdiff(minSup,T,n,p)
+global A B C 
 
 W = zeros(n*p,n*p);
 I = zeros(n,p);

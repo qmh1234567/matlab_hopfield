@@ -1,6 +1,6 @@
 %% 使用Hopfield网络挖掘关联规则
 function [E Freq R]=Copy_of_main(T,code1)
-global A B C tao  nRules minCof minSup n p code
+global A B C tao  nRules minCof minSup 
 code=code1;
 % 最小支持度计数 取最接近的整数
 n=size(T,1); % 交易次数
@@ -29,7 +29,7 @@ k=1; %迭代次数
 
 %% 计算最大频繁项集
 % 计算出权值和阈值
-[W,I]=newdiff(minSupCount,T);
+[W,I]=newdiff(minSupCount,T,n,p);
 
 % 映射到忆阻值矩阵
 % M=W+100; % 用忆阻值代替权值  增加了100
@@ -79,7 +79,7 @@ end
          break;
      end
      % 计算能量函数
-     e = energy(minSupCount,V,T);
+     e = energy(minSupCount,V,T,n,p);
      E(k)=e;
      k=k+1
  end
@@ -106,7 +106,7 @@ Freq = code(F)
 % 计算每个子项集的支持度
 S = support(T,F);
 % 计算关联规则 1是按照支持度排序  2是按照置信度排序 0代表oldmain  1代表main 3代表copyofmain
-R=rule(T,F,S,1,3);
+R=rule(T,F,S,1,3,code);
 % R={};
     
 

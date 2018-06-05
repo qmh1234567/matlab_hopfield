@@ -83,11 +83,11 @@ x=x(1:count);
 F_off_x=exp(-exp((x-a_off)./wc));
 F_on_x=exp(-exp((a_on-x)./wc));
 
+V=M.*Iinput;%计算电压
 
 subplot(2,2,2);
 plot(time,M,'b')
 title('M随时间变化')
-V=M.*Iinput;
 xlabel({'t/s','b'})
 ylabel('M')
 
@@ -110,20 +110,58 @@ xlabel({'x(nm)','d'})
 ylabel('f(x)')
 
 figure(2)
-subplot(1,2,1);
-plot(time,M,'b')
-title('M随时间变化')
-V=M.*Iinput;
-xlabel({'t/s','a'})
-ylabel('M')
+subplot(1,3,1);
+w=M./(M+R);
+plot3(time,M,w)
+title('突触,忆阻值和时间的变化关系图');
+xlabel({'time/s','a'})
+ylabel('M/Ω')
+zlabel('W/Ω')
+grid on
 
 % 突触随忆阻值的变化
-subplot(1,2,2)
+subplot(1,3,2)
+plot(time,M)
+title('忆阻值随时间的变化');
+xlabel({'time/s','b'})
+ylabel('M/Ω')
+
+% 突触随忆阻值的变化
+subplot(1,3,3)
 w=M./(M+R);
 plot(M,w)
 title('突触随忆阻值的变化');
-xlabel({'M','b'})
-ylabel('W')
+xlabel({'M/Ω','c'})
+ylabel('W/Ω')
+
+% figure(3)
+% subplot(1,4,1);
+% plot(time,Iinput);
+% title('电流随时间的变化')
+% xlabel({'t/s','a'})
+% ylabel('I(A)')
+% 
+% subplot(1,4,2);
+% plot(time,V);
+% title('电压随时间的变化');
+% xlabel({'t/s','b'})
+% ylabel('V(v)')
+% 
+% subplot(1,4,3);
+% plot(V,Iinput);
+% title('伏安特性曲线');
+% xlabel({'V(v)','c'})
+% ylabel('I(A)')
+% 
+% subplot(1,4,4);
+% plot3(time,V,Iinput)
+% title('伏安特性曲线(三维）')
+% xlabel('time/s')
+% ylabel({'V(v)','d'})
+% zlabel('I(A)') 
+% grid on
+% hold on
+% plot3(zeros(1,count),V,Iinput)
 
 
 

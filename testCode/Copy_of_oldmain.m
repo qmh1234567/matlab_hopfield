@@ -51,8 +51,11 @@ end
         for i=1:p
             sum_x = 0;
             for b=1:n
+                r=(a-1)*p+i;
+                c=(b-1)*p+1;
+                c1=b*p;
                 % 从1行30列中提取5列出来 不能使用reshape，会改变数据的
-                Row_M =W((a-1)*p+i,(b-1)*p+1:b*p);
+                Row_M =W(r,c:c1);
                 % V的每一行与Rom_w的每一行相乘
                 sum_x = sum_x+ sum(V(b,:).*Row_M);
             end
@@ -68,7 +71,7 @@ end
          break;
      end
      % 计算能量函数
-     e = energy(minSupCount,V,T);
+     e = energy(minSupCount,V,T,n,p);
      E(k)=e;
      k=k+1;
  end

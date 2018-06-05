@@ -1,5 +1,5 @@
 %% 计算关联规则
-function R=rule(T,F,S,sortFlag,mainFlag)
+function R=rule(T,F,S,sortFlag,mainFlag,code)
 global nRules minCof
 if mainFlag==0
     rulesfile='oldrules.txt';
@@ -59,7 +59,7 @@ switch sortFlag
         R=sortrows(R,-4);
 end
 % 将规则写入文件
-ShowRule(rulesfile,R);
+ShowRule(rulesfile,R,code);
 
 
 
@@ -101,8 +101,7 @@ for i=1:size(Sub_S,2)
 end
 Sk=S;
 
-function ShowRule(rulesfile,R)
-global code
+function ShowRule(rulesfile,R,code)
 % 将关联规则输出到txt中
 fid=fopen(rulesfile,'w');
 fprintf(fid,'%s (%s,%s) \n','Rule','Support','Confidence');
