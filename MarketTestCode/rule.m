@@ -1,7 +1,12 @@
 %% 计算关联规则
-function R=rule(T,F,S,sortFlag)
-global nRules minCof
-rulesfile = 'rules.txt'; % 输出关联规则
+function R=rule(S,sortFlag,mainFlag,minCof,code)
+nRules=1000;
+if mainFlag==0
+    rulesfile='oldrules.txt';
+elseif mainFlag==1
+    rulesfile = 'rules.txt'; % 输出关联规则
+end
+
 % 保存规则的数组
 R=cell(nRules,4);
 % 计数次数
@@ -53,7 +58,7 @@ switch sortFlag
         R=sortrows(R,-4);
 end
 % 将规则写入文件
-ShowRule(rulesfile,R);
+ShowRule(rulesfile,R,code);
 
 
 
@@ -95,17 +100,16 @@ for i=1:size(Sub_S,2)
 end
 Sk=S;
 
-function ShowRule(rulesfile,R)
-global code
+function ShowRule(rulesfile,R,code)
 % 将关联规则输出到txt中
 fid=fopen(rulesfile,'w');
 fprintf(fid,'%s (%s,%s) \n','Rule','Support','Confidence');
 for i=1:size(R,1)
-    s1 = '';
-    s2 = '';
+    s1 ='';
+    s2 ='';
     for j = 1:size(R{i,1},2)
         if j == size(R{i,1},2)
-            s1 = [s1 code{R{i,1}(j)}];
+            s1= [s1 code{R{i,1}(j)}];
         else
             s1 = [s1 code{R{i,1}(j)} ' '];
         end

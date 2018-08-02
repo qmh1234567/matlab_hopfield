@@ -1,6 +1,6 @@
 % 计算频繁项集的支持度
-function Sup = support(T,F)
-global nRules minSup
+function Sup = support(T,F,minSup)
+nRules = 1000;
 % 保存支持度的数组
 Sup = cell(nRules,2);
 % 事务的个数

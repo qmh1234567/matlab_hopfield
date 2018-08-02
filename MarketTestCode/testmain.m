@@ -7,8 +7,8 @@ testCount=100;
 % MyT=cell(testCount,1);  
 % Mycode=cell(testCount,1);
 % 神经网络的参数
-n=10;
-p=10;  
+n=8;
+p=8;  
 p1=0.5; % 1出现的概率
 minSup = 0.5;
 % Apriori算法 忆阻Hopfield网络 hopfield网络的最大频繁项集
@@ -29,13 +29,13 @@ for i=1:testCount
 %     MyT{i,1}=T;
 %     Mycode{i,1}=code;
     % 将每个数据集带入Apriori算法中
-    [AFq,Acount]=cal_apriori(T,code);
+    [AFq,Acount]=Copy_of_cal_apriori(T,code);
     % 计算权值和阈值
     [W,I]=newdiff(minSupCount,T,n,p);
     % 将每个数据集带入忆阻Hopfield网络
-    [MFq,Mcount,MEcount]=Copy_of_main(T,code,W,I);
+    [MFq,Mcount,MEcount]=Copy_of_MHNN_main(T,code,W,I);
      % 将每个数据集带入Hopfield网络
-    [HFq,Hcount,MHcount]=Copy_of_oldmain(T,code,W,I);
+    [HFq,Hcount,MHcount]=Copy_of_HNN_main(T,code,W,I);
     % 保存两种算法求出的最大频繁项集
      Apr_MaxFeq{i,1}=cell2mat(AFq);
      Mh_MaxFeq{i,1}=cell2mat(MFq);

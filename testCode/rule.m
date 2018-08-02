@@ -1,6 +1,7 @@
 %% 计算关联规则
 function R=rule(S,sortFlag,mainFlag)
-global nRules minCof
+nRules=1000;
+minCof = 0.5;
 if mainFlag==0
     rulesfile='oldrules.txt';
 elseif mainFlag==1

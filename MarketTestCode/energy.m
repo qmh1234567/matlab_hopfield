@@ -1,5 +1,10 @@
-function e=energy(minSup,V,T)
-global A B C n p
+function e=energy(minSup,V,T,n,p)
+% A = 350;
+% B = 100;
+% C = 110;
+A = 550;
+B = 100;
+C = 100;
 % ≥ı ºªØ
 sum_x = 0;
 sum_z = 0;

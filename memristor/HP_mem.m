@@ -28,8 +28,17 @@ function HP_mem(Uv,D,Ron,Roff,p,dt)
             x(t+1)=x(t)+dx*dt;
         end
     end
+    figure(1)
     plot(V,I,'b')
     title('伏安特性曲线');xlabel('V(v)');ylabel('I(A)')
+    figure(2)
+    plot(time,M,'r')
+    title('忆阻值随时间变化的曲线');xlabel('time(s)');ylabel('M')
+    figure(3)
+    plot(time,x,'r')
+    
+    
+    
 end
  
 

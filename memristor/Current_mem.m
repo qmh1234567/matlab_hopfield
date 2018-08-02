@@ -24,7 +24,7 @@ Ion=-8.9e-06;
 arf_on=12;
 arf_off=12;
 
-Roff=3e+06;
+Roff=3e06;
 Ron=100;
 
 k_off=1.46e-09;
@@ -110,28 +110,28 @@ xlabel({'x(nm)','d'})
 ylabel('f(x)')
 
 figure(2)
-subplot(1,3,1);
-w=M./(M+R);
-plot3(time,M,w)
-title('突触,忆阻值和时间的变化关系图');
-xlabel({'time/s','a'})
-ylabel('M/Ω')
-zlabel('W/Ω')
-grid on
+% subplot(1,3,1);
+% w=M./(M+R);
+% plot3(time,M,w)
+% title('突触,忆阻值和时间的变化关系图');
+% xlabel({'time/s','a'})
+% ylabel('M/Ω')
+% zlabel('W/Ω')
+% grid on
 
 % 突触随忆阻值的变化
-subplot(1,3,2)
+subplot(1,2,1)
 plot(time,M)
 title('忆阻值随时间的变化');
-xlabel({'time/s','b'})
+xlabel({'time/s','a'})
 ylabel('M/Ω')
 
 % 突触随忆阻值的变化
-subplot(1,3,3)
+subplot(1,2,2)
 w=M./(M+R);
 plot(M,w)
 title('突触随忆阻值的变化');
-xlabel({'M/Ω','c'})
+xlabel({'M/Ω','b'})
 ylabel('W/Ω')
 
 % figure(3)
