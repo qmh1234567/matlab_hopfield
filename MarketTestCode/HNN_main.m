@@ -2,19 +2,14 @@
 clc;
 clear;
 % 用户自定义最小支持度、最小置信度
-minSup = 0.1;
+minSup = 0.5;
 minCof = 0.5;
 nRules = 10000; % 最大规则数
-% 根据经验指定的相关变量
-% A = 350;
-% B = 100;
-% C = 80;
-
 tao = 1;
 lambda =3;
 %% 生成交易集
 %% 参数初始化
-inputfile = 'test1.txt';
+inputfile = 'testdata.txt';
 outputfile= 'as.txt'; % 输出转化后的01矩阵
 % 调用编码函数，将交易集转化为01矩阵
 [T,code]= trans2matrix(inputfile,outputfile,' ');

@@ -13,10 +13,10 @@ for i=1:MaxCount
 end
 
 % 画出准确率的图
-plot(TestAry,ac1,'-.o');
+plot(TestAry,ac1,'k-.o');
 hold on 
-plot(TestAry,ac2,'--+');
-title('两种网络的准确率比较')
+plot(TestAry,ac2,'k--^');
+% title('两种网络的准确率比较')
 legend('HNN','MHNN');
 xlabel('事务集大小');
 ylabel('网络准确率');

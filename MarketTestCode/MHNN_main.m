@@ -2,7 +2,7 @@
 clc;
 clear;
 % 用户自定义最小支持度、最小置信度
-minSup = 0.1;
+minSup = 0.5;
 minCof = 0.5;
 nRules = 10000; % 最大规则数
 % 根据经验指定的相关变量
@@ -89,19 +89,19 @@ k=1;%迭代次数
          break;
      end
      % 计算能量函数
-%     e = energy(minSupCount,V,T,n,p);
-%     E(k)=e;
+    e = energy(minSupCount,V,T,n,p);
+    E(k)=e;
     k=k+1;
  end
 
 %% 结果输出  能量函数曲线、最大频繁项集、关联规则
 % 清除能量函数矩阵多余的列
-% E(k:end)=[];
-% % 绘制能量函数图
-% plot(E)
-% xlabel('迭代次数')
-% ylabel('能量函数')
-% title('能量函数变化曲线')
+E(k:end)=[];
+% 绘制能量函数图
+plot(E)
+xlabel('迭代次数')
+ylabel('能量函数')
+title('能量函数变化曲线')
 
 % 输出最大频繁项集
 Frequent=int8(V);

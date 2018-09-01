@@ -1,19 +1,6 @@
-f a c n m g r w
-k g f e s w m n j h k
-l k u y g f r c v s
-m j u y r d s a g
-l k j u y t f d s a
-m n b v c x s d f e
-h j g f d e s a v c b n q w
-b n g d s a z x s
-m j h g f d e w a z
-b g f d s
-c v f d e s a w x
-v b f d s w e a
-v f d s w a z h
-m n b v c x z a s d f r e w q
-l k j h g f d s a
-b n h g d f e w q
-a s d f g t r e w q
-k j h g f d s a p
-h j g f d e s
+I1 I2 I5
+I4 I3
+I2 I3 I1
+I1 I2 I5 I3
+I4 I5
+I4 I1 I2 I5
